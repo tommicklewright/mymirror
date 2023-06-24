@@ -3,6 +3,10 @@ import { defineStore } from 'pinia';
 export type Specialty = 'ADD/ADHD' | 'Alcohol and Drug Use' | 'Anger' | 'Anxiety' | 'Autism Spectrum Disorder' | 'Bipolar Disorder' | 'Burnout';
 export type Gender = 'Male' | 'Female' | 'Non-Binary';
 export type PsychologistType = 'Clinical' | 'General';
+export type Availability = {
+  date: Date,
+  surcharge?: number,
+};
 
 export type Psychologist = {
   name: string,
@@ -10,7 +14,7 @@ export type Psychologist = {
   gender: Gender,
   specialties: Specialty[],
   description: string,
-  availability: Date[],
+  availability: Availability[],
   languages: string[],
   image: string,
 };
@@ -36,14 +40,27 @@ const defaultStore: PsychologistStore = {
   },
   specialties: ['ADD/ADHD', 'Alcohol and Drug Use', 'Anger', 'Anxiety', 'Autism Spectrum Disorder', 'Bipolar Disorder', 'Burnout'],
   genders: ['Female', 'Male', 'Non-Binary'],
-  languages: ['Afrikaans', 'Arabic', 'Bangla', 'Cantonese', 'Dari', 'English', 'Finnish', 'French', 'Greek'],
+  languages: ['Afrikaans', 'Arabic', 'Bangla', 'Cantonese', 'Dari', 'English', 'Finnish', 'French', 'Greek', 'Urdu'],
 };
 
 export const usePsychologistStore = defineStore('psychologists', {
   state: () => defaultStore,
   actions: {
     async fetchPsychologists() {
-      this.psychologists = await useApi().get<Psychologist[]>('/psychologists');
+      const psychologists = await useApi().get<Psychologist[]>('/psychologists');
+
+      this.psychologists = psychologists?.sort((a: Psychologist, b: Psychologist) => {
+        const firstDateA = a.availability[0]?.date || new Date(9999, 1, 1);
+        const firstDateB = b.availability[0]?.date || new Date(9999, 1, 1);
+        
+        if (firstDateA > firstDateB) {
+          return 1;
+        } else if (firstDateB > firstDateA) {
+          return -1;
+        }
+
+        return 0;
+      }) || [];
     },
     filteredPsychologists(filters: { 
       name?: string, 
