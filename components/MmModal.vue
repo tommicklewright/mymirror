@@ -10,6 +10,8 @@ const close = () => {
   show.value = false;
   setTimeout(() => emit('close'), 200);
 };
+
+useKeyListener('Escape', close);
 </script>
 
 <template>
