@@ -11,7 +11,9 @@ const emit = defineEmits<{
 
 const inputValue = ref(props.modelValue);
 watch(inputValue, () => emit('update:modelValue', inputValue.value));
-watch(props, () => inputValue.value = props.modelValue);
+
+const watchableModelValue = computed(() => props.modelValue);
+watch(watchableModelValue, () => inputValue.value = props.modelValue);
 </script>
 
 <template>

@@ -7,6 +7,8 @@ const props = defineProps<{
   disabled?: boolean,
   icon?: string,
   flat?: boolean,
+  highlight?: boolean,
+  dark?: boolean,
 }>();
 
 const handleClick = () => {
@@ -17,14 +19,17 @@ const handleClick = () => {
 
 const cssClass = computed(() => ({
   ...(props.disabled ? {} : {
-    'bg-primary': !props.flat,
-    'hover:bg-primary-dark': !props.flat,
+    'bg-primary': !props.flat && !props.dark,
+    'hover:bg-primary-dark': !props.flat && !props.dark,
+    'hover:bg-secondary-dark': props.dark,
     'hover:text-primary': props.flat,
-    'text-secondary': props.flat,
+    'text-secondary': props.flat && !props.highlight,
+    'text-primary': props.flat && props.highlight,
   }),
-  'bg-secondary': props.disabled,
+  'bg-secondary': props.disabled || props.dark,
   'cursor-default': props.disabled,
   'pl-[48px]': props.icon,
+  'px-0': props.flat && !props.icon,
 }));
 </script>
 
@@ -35,7 +40,8 @@ const cssClass = computed(() => ({
     class="
       text-background text-base leading-4
       relative
-      py-[17px] px-[24px]
+      px-[24px]
+      h-12
       rounded-[10px]
     "
   >
