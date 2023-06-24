@@ -71,7 +71,7 @@ export const usePsychologistStore = defineStore('psychologists', {
     }): Psychologist[] {
       const loweredNameParts = filters.name ? filters.name.toLowerCase().split(' ') : null;
       
-      return this.psychologists?.filter((psychologist) => {
+      const filteredPsychologists = this.psychologists?.filter((psychologist) => {
         if (loweredNameParts) {
           const loweredName = psychologist.name.toLowerCase();
 
@@ -98,6 +98,13 @@ export const usePsychologistStore = defineStore('psychologists', {
 
         return true;
       }) || [];
+
+      const now = new Date();
+
+      return filteredPsychologists.map((psychologist) => ({
+        ...psychologist,
+        availability: psychologist.availability.filter((availability) => availability.date > now),
+      }))
     },
   },
 });

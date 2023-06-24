@@ -22,6 +22,9 @@ export const useApi = () => ({
             { date: new Date(year, month, day, 12, 30) },
             { date: new Date(year, month, day, 13, 30) },
             { date: new Date(year, month, day, 14, 0) },
+            { date: new Date(year, month, day, 14, 30) },
+            { date: new Date(year, month, day, 16, 0) },
+            { date: new Date(year, month, day, 17, 30) },
           ],
           [ 
             { date: new Date(year, month, day + 1, 8, 0), surcharge: 25 }, 
@@ -29,6 +32,8 @@ export const useApi = () => ({
             { date: new Date(year, month, day + 1, 10, 0) }, 
             { date: new Date(year, month, day + 1, 11, 30) }, 
             { date: new Date(year, month, day + 1, 12, 30) },
+            { date: new Date(year, month, day + 1, 16, 30) },
+            { date: new Date(year, month, day + 1, 17, 0) },
           ],
           [ 
             { date: new Date(year, month, day + 2, 8, 0), surcharge: 25 }, 
@@ -44,6 +49,9 @@ export const useApi = () => ({
             { date: new Date(year, month, day, 12, 30) },
             { date: new Date(year, month, day, 13, 30) },
             { date: new Date(year, month, day, 14, 0) },
+            { date: new Date(year, month, day, 14, 30) },
+            { date: new Date(year, month, day, 16, 0) },
+            { date: new Date(year, month, day, 17, 30) },
           ],
         ];
 
