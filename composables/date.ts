@@ -3,10 +3,11 @@ const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 
 export const useDate = () => ({
   timeOfDay: (date: Date) => {
-    const minutes = date.getMinutes() - (date.getHours() * 60);
-    const amPm = date.getHours() >= 12 ? 'pm' : 'am';
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const amPm = hours >= 12 ? 'pm' : 'am';
 
-    return `${date.getHours()}${minutes > 0 ? '.' + `${minutes}`.padStart(2, '0') : ''}${amPm}`;
+    return `${hours > 12 ? hours - 12 : hours}${minutes > 0 ? '.' + `${minutes}`.padStart(2, '0') : ''}${amPm}`;
   },
   longDate: (date: Date) => {
     const dayOfMonth = date.getDate();
