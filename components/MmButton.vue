@@ -29,8 +29,7 @@ const cssClass = computed(() => ({
   'bg-secondary': props.disabled || props.dark,
   'cursor-default': props.disabled,
   'pl-[48px]': props.icon,
-  'px-0': props.flat && !props.icon,
-  'px-[24px]': !props.flat || props.icon,
+  'text-center': !props.flat,
 }));
 </script>
 
