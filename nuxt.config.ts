@@ -9,4 +9,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icon',
   ],
+  imports: {
+    dirs: [
+      'stores',
+    ],
+  },
 })

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export type Specialty = 'ADD/ADHD' | 'Alcohol and Drug Use' | 'Anger' | 'Anxiety' | 'Autism Spectrum Disorder' | 'Bipolar Disorder' | 'Burnout';
 export type Gender = 'Male' | 'Female' | 'Non-Binary';
 export type PsychologistType = 'Clinical' | 'General';
+
 export type Availability = {
   date: Date,
   surcharge?: number,
@@ -72,14 +73,6 @@ export const usePsychologistStore = defineStore('psychologists', {
       const loweredNameParts = filters.name ? filters.name.toLowerCase().split(' ') : null;
       
       const filteredPsychologists = this.psychologists?.filter((psychologist) => {
-        if (loweredNameParts) {
-          const loweredName = psychologist.name.toLowerCase();
-
-          if (loweredNameParts.find((part) => part && loweredName.indexOf(part) === -1)) {
-            return false;
-          }
-        }
-
         if (filters.gender && filters.gender !== psychologist.gender) {
           return false;
         }
@@ -96,6 +89,14 @@ export const usePsychologistStore = defineStore('psychologists', {
           return false;
         }
 
+        if (loweredNameParts) {
+          const loweredName = psychologist.name.toLowerCase();
+
+          if (loweredNameParts.find((part) => part && loweredName.indexOf(part) === -1)) {
+            return false;
+          }
+        }
+
         return true;
       }) || [];
 
@@ -104,7 +105,7 @@ export const usePsychologistStore = defineStore('psychologists', {
       return filteredPsychologists.map((psychologist) => ({
         ...psychologist,
         availability: psychologist.availability.filter((availability) => availability.date > now),
-      }))
+      }));
     },
   },
 });
