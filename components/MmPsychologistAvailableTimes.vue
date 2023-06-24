@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Availability } from '~/composables/psychologistStore';
+import { Availability } from '~/stores/psychologist';
 
 const date = useDate();
 

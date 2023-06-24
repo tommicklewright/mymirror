@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Gender, Psychologist, PsychologistType, Specialty } from '~/composables/psychologistStore';
+import { Gender, Psychologist, PsychologistType, Specialty } from '~/stores/psychologist';
 
 const today = new Date();
 const date = useDate();

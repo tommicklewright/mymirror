@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Psychologist } from '~/composables/psychologistStore';
+import { Psychologist } from '~/stores/psychologist';
 
 const props = defineProps<{
   psychologist: Psychologist,
