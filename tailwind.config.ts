@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import { useColour } from './composables/colour';
+import { useColour } from './utils/colour';
 
 const { theme } = useColour();
 const srcDir = '.';
