@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Gender, PsychologistType, Specialty } from '~/composables/psychologistStore';
+import { Gender, Psychologist, PsychologistType, Specialty } from '~/composables/psychologistStore';
 
 const today = new Date();
 const date = useDate();
@@ -37,41 +37,82 @@ const filteredPsychologists = computed(() => psychologistStore.filteredPsycholog
 }));
 
 const psychologistsAvailableToday = computed(() => filteredPsychologists.value.filter(({ availability }) => 
-  availability.find((dateAvailable) => date.isSameDay(dateAvailable, today))
+  availability.find((dateAvailable) => date.isSameDay(dateAvailable.date, today))
 ));
 
 const psychologistsAvailableAnotherDay = computed(() => filteredPsychologists.value.filter(({ availability }) => 
-  !availability.find((dateAvailable) => date.isSameDay(dateAvailable, today)) &&
-    availability.find((dateAvailable) => date.isAfter(dateAvailable, today))
+  !availability.find((dateAvailable) => date.isSameDay(dateAvailable.date, today)) &&
+    availability.find((dateAvailable) => date.isAfter(dateAvailable.date, today))
 ));
+
+const psychologistsStub = Array.from({ length: 4 }, (): Psychologist => ({
+  availability: [],
+  description: '',
+  gender: 'Female',
+  image: '',
+  languages: [],
+  name: '',
+  specialties: [],
+  type: 'General',
+}));
+
+const selectedPsychologist = ref<Psychologist | null>(null);
+const selectedTime = ref<{ 
+  psychologist: Psychologist,
+  time: Date,
+} | null>();
 </script>
 
 <template>
   <div>
     <MmContainer>
       <p class="text-3xl mb-6">Psychologists available ({{ filteredPsychologists.length }})</p>
-      <div class="grid gap-4 grid-cols-3 xl:grid-cols-6 mb-12">
+      <div class="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-6 mb-12">
         <MmSelect v-model="type" icon="mdi:account-multiple-outline" placeholder="Type" :options="types" />
         <MmSelect v-model="specialty" icon="mdi:account-check-outline" placeholder="Specialty" :options="psychologistStore.specialties.map((spec) => ({ key: spec, value: spec }))" />
         <MmSelect v-model="gender" icon="mdi:human-male-female" placeholder="Gender" :options="psychologistStore.genders.map((spec) => ({ key: spec, value: spec }))" />
         <MmSelect v-model="language" icon="iconoir:graduation-cap" placeholder="Language" :options="psychologistStore.languages.map((spec) => ({ key: spec, value: spec }))" />
         <MmInput v-model="name" icon="mdi:magnify" placeholder="Name" />
-        <MmButton @click="resetFilters" icon="ic:baseline-clear" flat v-if="filtersChanged">
+        <MmButton @click="resetFilters" icon="ic:baseline-clear" flat v-if="filtersChanged" class="text-left">
           Clear
         </MmButton>
       </div>
+
       <template v-if="psychologistStore.psychologists">
-        <MmPsychologistList v-if="psychologistsAvailableToday.length > 0" :date="today" :psychologists="psychologistsAvailableToday" />
+        <MmPsychologistList 
+          v-if="psychologistsAvailableToday.length > 0" 
+          :psychologists="psychologistsAvailableToday" 
+          @select="(psychologist) => selectedPsychologist = psychologist"
+          @select-time="(time) => selectedTime = time"
+        />
         <p v-else class="text-secondary-light">No psychologists matching your search are available{{ psychologistsAvailableAnotherDay.length === 0 ? '' : ' today' }}.</p>
 
         <template v-if="psychologistsAvailableAnotherDay.length > 0">
           <h3 class="mt-16 mb-8 text-2xl">More psychologists available at a different date/time</h3>
-          <MmPsychologistList :date="today" :psychologists="psychologistsAvailableAnotherDay" />
+          <MmPsychologistList 
+            :psychologists="psychologistsAvailableAnotherDay"
+            @select="(psychologist) => selectedPsychologist = psychologist"
+            @select-time="(time) => selectedTime = time"
+          />
         </template>
       </template>
-      <template v-else>
-        Loading...
-      </template>
+      <MmLoadingWrapper v-else>
+        <MmPsychologistList :psychologists="psychologistsStub" />
+      </MmLoadingWrapper>
     </MmContainer>
+
+    <MmModal v-if="selectedTime" @close="selectedTime = null">
+      <div>
+        <strong>Selected psychologist / time:</strong>
+        <p>{{ selectedTime.psychologist.name }} - {{ date.longDate(selectedTime.time) }} {{ date.timeOfDay(selectedTime.time) }}</p>
+      </div>
+    </MmModal>
+    <MmModal v-else-if="selectedPsychologist" @close="selectedPsychologist = null">
+      <MmPsychologistDetail 
+        :psychologist="selectedPsychologist" 
+        expanded
+        @select-time="(time) => selectedTime = { psychologist: <Psychologist>selectedPsychologist, time }"
+      />
+    </MmModal>
   </div>
 </template>
