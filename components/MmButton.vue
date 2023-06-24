@@ -30,6 +30,7 @@ const cssClass = computed(() => ({
   'cursor-default': props.disabled,
   'pl-[48px]': props.icon,
   'px-0': props.flat && !props.icon,
+  'px-[24px]': !props.flat || props.icon,
 }));
 </script>
 
@@ -40,7 +41,6 @@ const cssClass = computed(() => ({
     class="
       text-background text-base leading-4
       relative
-      px-[24px]
       h-12
       rounded-[10px]
     "

@@ -48,7 +48,7 @@ const availabilityForDate = (psychologist: Psychologist, dateToCheck: Date) => {
           :class="{
             'h-full': !props.expanded,
             'h-auto': props.expanded,
-            'hover:h-52': !props.expanded,
+            'hover:h-44': !props.expanded,
             'hover:shadow-md': !props.expanded,
           }"
         >
