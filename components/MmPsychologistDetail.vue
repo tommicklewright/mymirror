@@ -32,6 +32,7 @@ const availabilityForDate = (psychologist: Psychologist, dateToCheck: Date) => {
       <div 
         class="relative mb-6 rounded-full bg-gray-500 w-36 h-36 mx-auto psychologist-icon bg-cover bg-center" 
         :style="{ backgroundImage: `url('${props.psychologist.image}')` }"
+        :alt="`Profile photo for ${props.psychologist.name}`"
       >
         <Icon class="absolute -right-2 -bottom-2 text-5xl" name="ic:baseline-play-circle" />
       </div>

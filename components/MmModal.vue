@@ -25,6 +25,8 @@ useKeyListener('Escape', close);
       " 
       @click="close"
       v-if="show"
+      role="dialog"
+      aria-modal="true"
     >
       <div 
         class="
